@@ -114,6 +114,7 @@ class Tree
 
         $roots = sql::query('tendril.shards')
             ->where_eq('display', 1)
+            ->where_ne('name', 'tools')
             ->order('place')
             ->fetch_pair('name', 'master_id');
 
