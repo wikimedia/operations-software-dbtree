@@ -22,7 +22,8 @@ function db()
     {
         e("db connect: host");
         $db = @mysql_connect($db_host, $db_user, $db_pass)
-            or die('database'); mysql_select_db($db_name);
+            or die('database connection to ' . $db_name . ' on ' . $db_host . 'failed');
+        mysql_select_db($db_name);
     }
     return $db;
 }
