@@ -69,7 +69,7 @@ class Tree
             {
                 if (in_array($slave_id, $visited_ids))
                 {
-                    break;
+                    continue;
                 }
                 $cluster[] = array(
                     array(
