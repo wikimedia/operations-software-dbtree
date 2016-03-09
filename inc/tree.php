@@ -60,12 +60,17 @@ class Tree
         return $html;
     }
 
-    private function tree_recurse($master_id, $master_name, &$cluster)
+    private function tree_recurse($master_id, $master_name, &$cluster, &$visited_ids)
     {
+        $visited_ids[] = $master_id;
         if (isset($this->replink[$master_id]))
         {
             foreach ($this->replink[$master_id] as $slave_id)
             {
+                if (in_array($slave_id, $visited_ids))
+                {
+                    break;
+                }
                 $cluster[] = array(
                     array(
                         'v' => $this->node_instance($slave_id),
@@ -73,7 +78,7 @@ class Tree
                     ),
                     $master_name,
                 );
-                $this->tree_recurse($slave_id, $this->node_instance($slave_id), $cluster);
+                $this->tree_recurse($slave_id, $this->node_instance($slave_id), $cluster, $visited_ids);
             }
         }
     }
@@ -151,8 +156,8 @@ class Tree
                     $shard,
                 )
             );
-
-            $this->tree_recurse($master_id, $this->node_instance($master_id), $cluster);
+            $visited_ids = array();
+            $this->tree_recurse($master_id, $this->node_instance($master_id), $cluster, $visited_ids);
 
             $clusters[] = $cluster;
         }
