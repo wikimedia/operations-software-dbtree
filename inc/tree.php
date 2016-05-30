@@ -86,7 +86,7 @@ class Tree
     public function generate()
     {
         $this->hosts = sql::query('tendril.servers')
-            ->where_not_regexp('host', '^(dbstore|labsdb|db1069)')
+            ->where_not_regexp('host', '^(dbstore|labsdb|db1069|db1047)')
             ->fetch_all();
 
         $this->qps = sql::query('tendril.global_status_log gsl')
