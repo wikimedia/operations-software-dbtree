@@ -14,6 +14,13 @@ set_error_handler(
     }
 );
 
+# return http 503 if database connection fails to prevent
+# error pages from being cached in varnish (T163143)
+function db_fail($db_name, $db_host) {
+    header($_SERVER['SERVER_PROTOCOL'] . ' Service Unavailable' . , true, 503);
+    die('database connection to ' . $db_name . ' on ' . $db_host . 'failed');
+}
+
 function db()
 {
     static $db = null;
@@ -22,7 +29,7 @@ function db()
     {
         e("db connect: host");
         $db = @mysql_connect($db_host, $db_user, $db_pass)
-            or die('database connection to ' . $db_name . ' on ' . $db_host . 'failed');
+            or db_fail($db_name, $db_host);
         mysql_select_db($db_name);
     }
     return $db;
