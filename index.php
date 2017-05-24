@@ -17,7 +17,7 @@ set_error_handler(
 # return http 503 if database connection fails to prevent
 # error pages from being cached in varnish (T163143)
 function db_fail($db_name, $db_host) {
-    header($_SERVER['SERVER_PROTOCOL'] . ' Service Unavailable' . , true, 503);
+    header($_SERVER['SERVER_PROTOCOL'] . ' Service Unavailable', true, 503);
     die('database connection to ' . $db_name . ' on ' . $db_host . 'failed');
 }
 
