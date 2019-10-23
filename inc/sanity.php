@@ -283,7 +283,7 @@ class sql
     public static function quote($val)
     {
         if (is_numeric($val) && preg_match('/^[-]{0,1}[0-9]+$/', $val)) return $val;
-        if (is_scalar($val)) return sprintf("'%s'", mysql_real_escape_string($val));
+        if (is_scalar($val)) return sprintf("'%s'", mysqli_real_escape_string($val));
         if (is_array($val))
         {
             $out = array(); foreach ($val as $v) $out[] = self::quote($v);
@@ -777,16 +777,16 @@ class sql
         $this->error = null;
         $this->error_msg = null;
 
-        $host = preg_replace('/^([^\s]+).*$/', '\1', mysql_get_host_info($this->db));
+        $host = preg_replace('/^([^\s]+).*$/', '\1', mysqli_get_host_info($this->db));
         e('sql '.$host.': '.rtrim($sql)."\n");
 
-        $this->rs = mysql_query($sql, $this->db);
+        $this->rs = mysqli_query($sql, $this->db);
         $this->rs_sql = $sql;
 
         if (!$this->rs)
         {
-            $this->error = mysql_errno();
-            $this->error_msg = mysql_error();
+            $this->error = mysqli_errno();
+            $this->error_msg = mysqli_error();
             e('sql error: '.$this->error.' '.$this->error_msg."\n");
         }
 
@@ -795,10 +795,10 @@ class sql
         if (is_resource($this->rs))
         {
             $i = 0;
-            $l = mysql_num_fields($this->rs);
+            $l = mysqli_num_fields($this->rs);
             while ($i < $l)
             {
-                $this->rs_fields[$i] = mysql_fetch_field($this->rs, $i);
+                $this->rs_fields[$i] = mysqli_fetch_field($this->rs, $i);
                 $i++;
             }
         }
@@ -826,7 +826,7 @@ class sql
     // retrieve all available rows
     public function fetch_all($index=null)
     {
-        $host = preg_replace('/^([^\s]+).*$/', '\1', mysql_get_host_info($this->db));
+        $host = preg_replace('/^([^\s]+).*$/', '\1', mysqli_get_host_info($this->db));
 
         $sql = $this->rs_sql ? $this->rs_sql: $this->get_select();
         $md5 = md5($sql);
@@ -849,7 +849,7 @@ class sql
         }
 
         $rows = array();
-        while (($row = mysql_fetch_array($this->rs, MYSQL_NUM)) && $row)
+        while (($row = mysqli_fetch_array($this->rs, MYSQL_NUM)) && $row)
         {
             $j = count($rows);
             $res = array();
@@ -941,7 +941,7 @@ class sql
     public function insert($set=null, $val=null) { if ($set) $this->set($set, $val); return $this->execute($this->get_insert()); }
     public function update($set=null, $val=null) { if ($set) $this->set($set, $val); return $this->execute($this->get_update()); }
     public function replace($set=null, $val=null) { if ($set) $this->set($set, $val); return $this->execute($this->get_replace()); }
-    public function insert_id($set=null, $val=null) { $this->insert($set, $val); return mysql_insert_id(); }
+    public function insert_id($set=null, $val=null) { $this->insert($set, $val); return mysqli_insert_id(); }
 
     public function truncate() { return $this->execute('truncate table '.self::quote_name($this->table)); }
 

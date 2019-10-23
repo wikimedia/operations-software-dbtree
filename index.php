@@ -28,9 +28,9 @@ function db()
     if (is_null($db) || !is_resource($db))
     {
         e("db connect: host");
-        $db = @mysql_connect($db_host, $db_user, $db_pass)
+        $db = @mysqli_connect($db_host, $db_user, $db_pass)
             or db_fail($db_name, $db_host);
-        mysql_select_db($db_name);
+        mysqli_select_db($db_name);
     }
     return $db;
 }
