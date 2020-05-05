@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Core Databases</title>
-    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.5.1.min.js"></script>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         google.charts.load('47', {packages: ['corechart', 'table', 'orgchart']});
