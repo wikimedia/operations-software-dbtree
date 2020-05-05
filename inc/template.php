@@ -5,8 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Core Databases</title>
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript" src='https://www.google.com/jsapi?autoload={"modules":[{"name":"visualization","version":"1","packages":["corechart","table","orgchart"]}]}'></script>
+    <script>
+        google.charts.load('47', {packages: ['corechart', 'table', 'orgchart']});
+    </script>
 
     <style>
 
@@ -92,7 +93,7 @@
 
     <script type="text/javascript">
 
-    google.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawChart);
 
     function drawChart()
     {
