@@ -90,6 +90,7 @@ class Tree
             ->fetch_all();
 
         $this->qps = sql::query('tendril.global_status_log gsl')
+            ->use_index('stamp')
             ->fields(array(
                 'srv.id',
                 'floor((max(value)-min(value))/(unix_timestamp(max(stamp))-unix_timestamp(min(stamp)))) as qps',

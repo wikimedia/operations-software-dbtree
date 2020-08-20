@@ -234,19 +234,20 @@ class cache
 
 class sql
 {
-    protected $db     = null;
-    protected $table  = null;
-    protected $alias  = null;
-    protected $fields = array();
-    protected $where  = array();
-    protected $having = array();
-    protected $limit  = null;
-    protected $order  = array();
-    protected $group  = array();
-    protected $join   = array();
+    protected $db        = null;
+    protected $table     = null;
+    protected $alias     = null;
+    protected $use_index = null;
+    protected $fields    = array();
+    protected $where     = array();
+    protected $having    = array();
+    protected $limit     = null;
+    protected $order     = array();
+    protected $group     = array();
+    protected $join      = array();
 
-    protected $cache  = 0;
-    protected $expire = 0;
+    protected $cache      = 0;
+    protected $expire     = 0;
     // shared result set cache
     protected static $_result_cache = array();
 
@@ -425,6 +426,12 @@ class sql
 
         if (empty($this->fields))
             $this->field(($alias ? $alias: $table).'.*');
+
+        return $this;
+    }
+    public function use_index($index)
+    {
+        $this->use_index = $index;
 
         return $this;
     }
@@ -696,7 +703,12 @@ class sql
         return $this;
     }
     // methods for building SQL fragments
-    private function get_from() { return 'from '.self::quote_name($this->table) .($this->alias ? ' '.$this->alias:''); }
+    private function get_from()
+    { 
+        return 'from '.self::quote_name($this->table)
+               .($this->alias ? ' '.$this->alias:'')
+               .($this->use_index ? 'USE INDEX( '.self::quote_name($this->alias).' ) ':'');
+    }
     private function get_join() { return $this->join ? join(' ', $this->join): ''; }
     private function get_where() { return $this->where ? 'where '.join(' and ', $this->where) : ''; }
     private function get_having() { return $this->having ? 'having '.join(' and ', $this->having) : ''; }
