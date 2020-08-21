@@ -704,10 +704,10 @@ class sql
     }
     // methods for building SQL fragments
     private function get_from()
-    { 
+    {
         return 'from '.self::quote_name($this->table)
                .($this->alias ? ' '.$this->alias:'')
-               .($this->use_index ? 'USE INDEX( '.self::quote_name($this->alias).' ) ':'');
+               .($this->use_index ? ' USE INDEX( '.self::quote_name($this->use_index).' )':'');
     }
     private function get_join() { return $this->join ? join(' ', $this->join): ''; }
     private function get_where() { return $this->where ? 'where '.join(' and ', $this->where) : ''; }
